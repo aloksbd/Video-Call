@@ -30,6 +30,11 @@ class AudioController: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate 
             recordingSession.requestRecordPermission() { [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
+                        do {
+                            try self.recordingSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+                        } catch let error as NSError {
+                            print("audioSession error: \(error.localizedDescription)")
+                        }
 //                        self.loadRecordingUI()
                     } else {
                         // failed to record!
@@ -128,19 +133,19 @@ class AudioController: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate 
     var counter = 0
     
     func run(){
-        if counter == 1{
+        if counter == 10{
             finishRecording(success: true)
             if let data = try? Data(contentsOf: getFileUrl()){
                 SocketIOManager.sharedInstance.sendAudio(data: data)
             }
             startRecording()
         }
-        if counter == 2{
+        if counter == 12{
             
             counter = 0
         }
         counter += 1
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1/24, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1/30, execute: {
             self.run()
         })
     }

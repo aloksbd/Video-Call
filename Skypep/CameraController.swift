@@ -19,6 +19,7 @@ class CameraController:NSObject {
     override init() {
         super.init()
         
+        imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         // Prepare a video capturing session.
         self.session = AVCaptureSession()
@@ -105,7 +106,7 @@ extension CameraController: AVCaptureVideoDataOutputSampleBufferDelegate{
     func run(){
         let data = imageView.image?.jpegData(compressionQuality: 0.2)
         SocketIOManager.sharedInstance.sendPacket(data: data)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1/24, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1/30, execute: {
             self.run()
         })
     }

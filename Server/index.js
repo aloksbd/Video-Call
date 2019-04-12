@@ -17,7 +17,15 @@ io.sockets.on('connection',function(socket){
     console.log('player connected');
 
     // socketList[socket.id] = socket;
+    
     socketList.push(socket);
+
+    for (i = 0; i < socketList.length; i++){
+        console.log(socketList[i].id);
+        if (socket != socketList[i]){
+            socketList[i].emit("newConnection",socket.id);
+        }
+    }
 
     socket.on('disconnect',function(){
         delete socketList[socket.id];
@@ -30,7 +38,7 @@ io.sockets.on('connection',function(socket){
         for (i = 0; i < socketList.length; i++){
             // console.log(socketList[i].id);
             if (socket != socketList[i]){
-                socketList[i].emit("newPacket",data);
+                socketList[i].emit("newPacket",socket.id,data);
             }
         }
     });
@@ -41,7 +49,7 @@ io.sockets.on('connection',function(socket){
         for (i = 0; i < socketList.length; i++){
             console.log(socketList[i].id);
             if (socket != socketList[i]){
-                socketList[i].emit("newAudio",data);
+                socketList[i].emit("newAudio",socket.id,data);
             }
         }
     });

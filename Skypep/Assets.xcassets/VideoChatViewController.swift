@@ -33,7 +33,6 @@ class VideoChatViewController: UIViewController {
     lazy var selfVideoView: UIView = {
        let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = .green
         v.widthAnchor.constraint(equalToConstant: self.selfVideoWidth).isActive = true
         v.heightAnchor.constraint(equalToConstant: self.selfVideoHeight).isActive = true
 //        v.layer.addSublayer(self.camController.SetUpPreviewLayer(frame:CGRect(x: 0, y: 0, width: self.selfVideoWidth, height: self.selfVideoHeight)))
@@ -49,6 +48,7 @@ class VideoChatViewController: UIViewController {
     
     lazy var incomingVideoView: UIImageView = {
         let v = UIImageView()
+        v.contentMode = .scaleAspectFill
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = .yellow
         return v

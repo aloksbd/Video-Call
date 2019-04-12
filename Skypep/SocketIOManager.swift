@@ -35,14 +35,14 @@ class SocketIOManager: NSObject {
     func startListening(completionHandler: @escaping (_ data: Data?) -> Void){
         socket.on("newPacket") { (data, socketAck) -> Void in
             print("......")
-            completionHandler(data[0] as? Data)
+            completionHandler(data[1] as? Data)
         }
     }
     
     func startListeningAudio(completionHandler: @escaping (_ data: Data?) -> Void){
         socket.on("newAudio") { (data, socketAck) -> Void in
             print("......Audio")
-            completionHandler(data[0] as? Data)
+            completionHandler(data[1] as? Data)
         }
     }
     
