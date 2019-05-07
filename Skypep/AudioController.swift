@@ -44,11 +44,11 @@ class AudioController: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate 
         } catch {
             // failed to record!
         }
-        SocketIOManager.sharedInstance.startListeningAudio { (data) in
-            if let data = data{
-                self.play_recording(data: data)
-            }
-        }
+//        SocketIOManager.sharedInstance.startListeningAudio { (data) in
+//            if let data = data{
+//                self.play_recording(data: data)
+//            }
+//        }
         startRecording()
         run()
     }
@@ -133,16 +133,16 @@ class AudioController: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate 
     var counter = 0
     
     func run(){
-        if counter == 10{
+        if counter == 4{
             finishRecording(success: true)
             if let data = try? Data(contentsOf: getFileUrl()){
-                SocketIOManager.sharedInstance.sendAudio(data: data)
+//                SocketIOManager.sharedInstance.sendAudio(data: data)
             }
-            startRecording()
         }
-        if counter == 12{
+        if counter == 5{
             
             counter = 0
+            startRecording()
         }
         counter += 1
         DispatchQueue.main.asyncAfter(deadline: .now() + 1/30, execute: {

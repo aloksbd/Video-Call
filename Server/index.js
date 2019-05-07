@@ -6,6 +6,8 @@ app.get('/', function(req, res){
   res.send('<h1>AppCoda - SocketChat Server</h1>');
 });
 
+// app.use('/',express.static(__dirname + '/'));
+
 
 http.listen(1000, function(){
   console.log('Listening on *:1000');

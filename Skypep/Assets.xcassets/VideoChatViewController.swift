@@ -7,8 +7,36 @@
 //
 
 import UIKit
+import CocoaAsyncSocket
 
-class VideoChatViewController: UIViewController {
+class VideoChatViewController: UIViewController, GCDAsyncUdpSocketDelegate {
+    
+    var _socket: GCDAsyncUdpSocket?
+    var socket: GCDAsyncUdpSocket? {
+        get {
+            if _socket == nil {
+                guard let port = UInt16("1234") , port > 0 else {
+                    print(">>> Unable to init socket: local port unspecified.")
+                    return nil
+                }
+                let sock = GCDAsyncUdpSocket(delegate: self, delegateQueue: DispatchQueue.main)
+                do {
+                    try sock.bind(toPort: port)
+                    try sock.beginReceiving()
+                } catch let err as NSError {
+                    print(">>> Error while initializing socket: \(err.localizedDescription)")
+                    sock.close()
+                    return nil
+                }
+                _socket = sock
+            }
+            return _socket
+        }
+        set {
+            _socket?.close()
+            _socket = newValue
+        }
+    }
     
     var audioController = AudioController()
     
@@ -57,6 +85,7 @@ class VideoChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        _socket?.setDelegate(self)
         // Do any additional setup after loading the view.
         view.backgroundColor = .red
         
@@ -64,23 +93,45 @@ class VideoChatViewController: UIViewController {
         view.addSubview(selfVideoView)
         addConstraints()
         
-//        run()
+        run()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        SocketIOManager.sharedInstance.startListening { (data) in
-            if let data = data{
-                self.incomingVideoView.image = UIImage(data: data)
-            }
-        }
+//        SocketIOManager.sharedInstance.startListening { (data) in
+//            if let data = data{
+//                self.incomingVideoView.image = UIImage(data: data)
+//            }
+//        }
     }
     
     func run(){
-//        SocketIOManager.sharedInstance.sendPacket(data: "alok")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+        //        client.enableBroadcast()
+        //        let ii = client.send(string: "asd")
+        //        if ii.isSuccess{
+        //            print("sent tp \(client.address):\(client.port)")
+        ////            client.close()
+        //        }else{
+        //            print(ii.error)
+        //        }
+        if let data = camController.imageView.image?.jpegData(compressionQuality:  0.2){
+                socket?.send(data, toHost: "192.168.10.122", port: 7000, withTimeout: -1, tag: 1)
+                socket?.send("STR".data( using: String.Encoding.utf8)!, toHost: "192.168.10.122", port: 7000, withTimeout: -1, tag: 1)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1/30, execute: {
             self.run()
         })
+    }
+    
+    func udpSocket(_ sock: GCDAsyncUdpSocket, didReceive data: Data, fromAddress address: Data, withFilterContext filterContext: Any?) {
+        if let img = UIImage(data: data as Data){
+            DispatchQueue.main.async {
+                self.incomingVideoView.image = img
+            }
+        }
+        if let str = String(bytes: data, encoding: .utf8){
+            print(str)
+        }
     }
     
     func addConstraints(){

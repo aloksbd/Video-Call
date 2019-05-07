@@ -17,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		043052FD22814B2B003E3192 /* Skypep.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Skypep.entitlements; sourceTree = "<group>"; };
 		0446A3A7225F004600156E22 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		0450B5692257175300DFBC33 /* Skypep.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Skypep.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0450B56C2257175300DFBC33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +66,7 @@
 		0450B56B2257175300DFBC33 /* Skypep */ = {
 			isa = PBXGroup;
 			children = (
+				043052FD22814B2B003E3192 /* Skypep.entitlements */,
 				0450B5782257175700DFBC33 /* Info.plist */,
 				0450B56C2257175300DFBC33 /* AppDelegate.swift */,
 				0450B5732257175700DFBC33 /* Assets.xcassets */,
@@ -129,6 +131,14 @@
 				TargetAttributes = {
 					0450B5682257175300DFBC33 = {
 						CreatedOnToolsVersion = 10.2;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+							com.apple.NetworkExtensions.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -169,13 +179,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Skypep/Pods-Skypep-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftSocket/SwiftSocket.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSocket.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

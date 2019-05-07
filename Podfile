@@ -8,5 +8,7 @@ target 'Skypep' do
   # Pods for Skypep
   
   pod 'Socket.IO-Client-Swift'
+  pod 'SwiftSocket'
+  pod 'CocoaAsyncSocket'  
 
 end
