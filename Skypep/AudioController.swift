@@ -9,9 +9,10 @@
 //import Foundation
 import UIKit
 import AVFoundation
+import CocoaAsyncSocket
 
 class AudioController: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
-    
+    var socket: GCDAsyncUdpSocket?
     var recordingSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
     
@@ -133,13 +134,28 @@ class AudioController: NSObject, AVAudioRecorderDelegate, AVAudioPlayerDelegate 
     var counter = 0
     
     func run(){
-        if counter == 4{
+        if counter == 2{
             finishRecording(success: true)
-            if let data = try? Data(contentsOf: getFileUrl()){
-//                SocketIOManager.sharedInstance.sendAudio(data: data)
+            if let fileUpdater = try? FileHandle(forUpdating: getFileUrl()) {
+                
+                // function which when called will cause all updates to start from end of the file
+                fileUpdater.seekToEndOfFile()
+                
+                // which lets the caller move editing to any position within the file by supplying an offset
+                fileUpdater.write("%".data(using: .utf8)!)
+                
+                //Once we convert our new content to data and write it, we close the file and that’s it!
+                fileUpdater.closeFile()
             }
-        }
-        if counter == 5{
+            if let data = try? Data(contentsOf: getFileUrl()){
+                //                if let str = String(bytes: data, encoding: .utf8){
+                //                    let newData = Data((str + "%").utf8)
+                socket?.send(data, toHost: "192.168.10.122", port: 7000, withTimeout: -1, tag: 1)
+                //                }
+                //                SocketIOManager.sharedInstance.sendAudio(data: data)
+            }
+            //        }
+            //        if counter == 3{
             
             counter = 0
             startRecording()

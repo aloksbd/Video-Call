@@ -88,7 +88,7 @@ class VideoChatViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         _socket?.setDelegate(self)
         // Do any additional setup after loading the view.
         view.backgroundColor = .red
-        
+        audioController.socket = socket
         view.addSubview(incomingVideoView)
         view.addSubview(selfVideoView)
         addConstraints()
@@ -115,10 +115,10 @@ class VideoChatViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         //            print(ii.error)
         //        }
         if let data = camController.imageView.image?.jpegData(compressionQuality:  0.2){
-                socket?.send(data, toHost: "192.168.10.122", port: 7000, withTimeout: -1, tag: 1)
-                socket?.send("STR".data( using: String.Encoding.utf8)!, toHost: "192.168.10.122", port: 7000, withTimeout: -1, tag: 1)
+                socket?.send(data, toHost: "192.168.10.255", port: 7000, withTimeout: -1, tag: 1)
+//                socket?.send("STR".data( using: String.Encoding.utf8)!, toHost: "192.168.10.122", port: 7000, withTimeout: -1, tag: 1)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1/30, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1/24, execute: {
             self.run()
         })
     }
@@ -128,9 +128,8 @@ class VideoChatViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             DispatchQueue.main.async {
                 self.incomingVideoView.image = img
             }
-        }
-        if let str = String(bytes: data, encoding: .utf8){
-            print(str)
+        }else{
+            audioController.play_recording(data: data)
         }
     }
     

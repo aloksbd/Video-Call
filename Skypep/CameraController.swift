@@ -67,7 +67,7 @@ class CameraController:NSObject, GCDAsyncUdpSocketDelegate {
 //        }
         do{
             try device.lockForConfiguration()
-            device.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: 30)
+            device.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: 10)
         }
         catch {
             print("boom")
@@ -97,7 +97,7 @@ class CameraController:NSObject, GCDAsyncUdpSocketDelegate {
         }
         do {
             try self.device.lockForConfiguration()
-            self.device.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: 15) // fps
+            self.device.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: 20) // fps
             self.device.unlockForConfiguration()
         } catch {
             print("could not configure a device")

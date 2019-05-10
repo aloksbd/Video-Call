@@ -1,5 +1,5 @@
-var PORT = 7000;
-var HOST = '192.168.10.122';
+var PORT = 3000;
+var HOST = '192.168.10.120';
 
 var dgram = require('dgram');
 var message = Buffer.from('My KungFu is Good!');
